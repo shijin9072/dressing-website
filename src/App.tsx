@@ -9,10 +9,10 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Collections from './components/Collections';
 import OutfitShowcase from './components/OutfitShowcase';
-import DressingStudio from './components/DressingStudio';
 import ProductGrid from './components/ProductGrid';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
+import CustomCursor from './components/CustomCursor';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +26,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative grainy min-h-screen">
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -34,13 +34,13 @@ export default function App() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
-            className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center"
+            className="fixed inset-0 z-[100] bg-primary flex flex-col items-center justify-center"
           >
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl md:text-6xl font-serif tracking-[0.5em] mb-4"
+              className="text-4xl md:text-6xl font-serif tracking-[0.5em] mb-4 text-white"
             >
               VOGUE
             </motion.h1>
@@ -60,15 +60,15 @@ export default function App() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
+          <CustomCursor />
           <Navbar />
           <Hero />
           <Collections />
           <OutfitShowcase />
-          <DressingStudio />
           <ProductGrid />
           <Testimonials />
           <Footer />
-          
+
           {/* Floating Action Button (Top) */}
           <motion.button
             initial={{ opacity: 0 }}

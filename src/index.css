@@ -1,38 +1,73 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", serif;
-  
+
   --color-primary: var(--primary);
-  --color-accent: #c8a96a;
+  --color-secondary: var(--secondary);
+  --color-accent: #C8A96A;
   --color-bg: var(--bg);
+  --color-surface: var(--surface);
 }
 
 :root {
-  --primary: #111111;
-  --bg: #ffffff;
+  --primary: #0A0A0A;
+  --secondary: #666666;
+  --bg: #F5F5F0;
+  --surface: #FFFFFF;
+  --accent: #C8A96A;
 }
 
 .dark {
-  --primary: #ffffff;
-  --bg: #111111;
+  --primary: #F5F5F0;
+  --secondary: #A0A0A0;
+  --bg: #0A0A0A;
+  --surface: #121212;
 }
 
 @layer base {
+  * {
+    cursor: none !important;
+  }
+
   body {
-    @apply bg-bg text-primary font-sans antialiased overflow-x-hidden transition-colors duration-500;
+    @apply bg-bg text-primary font-sans antialiased overflow-x-hidden transition-colors duration-700 selection:bg-accent selection:text-white;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif tracking-tight;
   }
+}
+
+/* Luxury Grain Effect */
+.grainy {
+  position: relative;
+}
+
+.grainy::before {
+  content: "";
+  position: fixed;
+  inset: -200%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  z-index: 9999;
+}
+
+.dark .grainy::before {
+  opacity: 0.05;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -40,11 +75,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary/20 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary/40;
+  @apply bg-primary/10 rounded-full hover:bg-accent/40 transition-colors;
 }
 
 /* Smooth Scroll */
@@ -52,11 +83,26 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Hide scrollbar for horizontal scroll sections */
+/* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Magnetic Button Utility */
+.magnetic-btn {
+  @apply relative overflow-hidden transition-transform duration-300 active:scale-95;
+}
+
+.magnetic-btn::after {
+  content: '';
+  @apply absolute inset-0 bg-primary opacity-0 transition-opacity duration-300;
+}
+
+.magnetic-btn:hover::after {
+  @apply opacity-[0.03];
 }

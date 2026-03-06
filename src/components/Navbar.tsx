@@ -9,7 +9,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -20,60 +20,84 @@ export default function Navbar() {
     document.documentElement.classList.toggle('dark');
   };
 
+  const navLinks = [
+    { name: 'Collections', href: '#collections' },
+    { name: 'Studio', href: '#studio' },
+    { name: 'Shop', href: '#shop' },
+    { name: 'About', href: '#about' }
+  ];
+
   return (
-    <nav 
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        isScrolled ? 'bg-bg/80 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-8'
-      }`}
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ${isScrolled
+        ? 'bg-bg/60 backdrop-blur-xl py-4 border-b border-primary/5'
+        : 'bg-transparent py-8'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Left: Links (Desktop) */}
-        <div className="hidden md:flex items-center space-x-8">
-          {['Collections', 'Studio', 'Shop', 'About'].map((item) => (
-            <a 
-              key={item} 
-              href={`#${item.toLowerCase()}`}
-              className="text-xs uppercase tracking-[0.2em] font-medium hover:text-accent transition-colors"
+        <div className="hidden md:flex items-center space-x-10">
+          {navLinks.map((link, idx) => (
+            <motion.a
+              key={link.name}
+              href={link.href}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className="group relative text-[10px] uppercase tracking-[0.3em] font-semibold overflow-hidden"
             >
-              {item}
-            </a>
+              <span className="block transition-transform duration-500 group-hover:-translate-y-full">{link.name}</span>
+              <span className="absolute top-full left-0 block transition-transform duration-500 group-hover:-translate-y-full text-accent">{link.name}</span>
+            </motion.a>
           ))}
         </div>
 
         {/* Center: Logo */}
-        <a href="/" className="absolute left-1/2 -translate-x-1/2">
-          <h1 className={`text-2xl md:text-3xl font-serif tracking-widest transition-all duration-500 ${
-            isScrolled ? 'scale-90' : 'scale-100'
-          }`}>
+        <motion.a
+          href="/"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute left-1/2 -translate-x-1/2"
+        >
+          <h1 className={`text-xl md:text-3xl font-serif tracking-[0.4em] transition-all duration-700 ${isScrolled ? 'scale-90 opacity-80' : 'scale-100'
+            }`}>
             VOGUE
           </h1>
-        </a>
+        </motion.a>
 
         {/* Right: Icons */}
-        <div className="flex items-center space-x-6">
-          <button 
-            onClick={toggleDarkMode}
-            className="hover:text-accent transition-colors"
+        <div className="flex items-center space-x-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="flex items-center space-x-6"
           >
-            {isDarkMode ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
-          </button>
-          <button className="hover:text-accent transition-colors">
-            <Search size={20} strokeWidth={1.5} />
-          </button>
-          <button className="hidden md:block hover:text-accent transition-colors">
-            <User size={20} strokeWidth={1.5} />
-          </button>
-          <button className="relative hover:text-accent transition-colors">
-            <ShoppingBag size={20} strokeWidth={1.5} />
-            <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-              0
-            </span>
-          </button>
-          <button 
+            <button
+              onClick={toggleDarkMode}
+              className="hover:text-accent transition-colors duration-300"
+            >
+              {isDarkMode ? <Sun size={18} strokeWidth={1.2} /> : <Moon size={18} strokeWidth={1.2} />}
+            </button>
+            <button className="hover:text-accent transition-colors duration-300">
+              <Search size={18} strokeWidth={1.2} />
+            </button>
+            <button className="hidden md:block hover:text-accent transition-colors duration-300">
+              <User size={18} strokeWidth={1.2} />
+            </button>
+            <button className="relative group hover:text-accent transition-colors duration-300">
+              <ShoppingBag size={18} strokeWidth={1.2} />
+              <span className="absolute -top-1.5 -right-1.5 bg-accent text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
+                0
+              </span>
+            </button>
+          </motion.div>
+
+          <button
             className="md:hidden hover:text-accent transition-colors"
             onClick={() => setIsMobileMenuOpen(true)}
           >
-            <Menu size={20} strokeWidth={1.5} />
+            <Menu size={20} strokeWidth={1.2} />
           </button>
         </div>
       </div>
@@ -82,31 +106,41 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-bg z-[60] flex flex-col p-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-bg z-[60] flex flex-col"
           >
-            <div className="flex justify-end">
-              <button onClick={() => setIsMobileMenuOpen(false)}>
-                <X size={32} strokeWidth={1} />
+            <div className="flex justify-between items-center p-8">
+              <span className="text-xl font-serif tracking-widest">VOGUE</span>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-12 h-12 flex items-center justify-center rounded-full border border-primary/10"
+              >
+                <X size={24} strokeWidth={1} />
               </button>
             </div>
-            <div className="flex flex-col items-center justify-center flex-1 space-y-8">
-              {['Collections', 'Studio', 'Shop', 'About'].map((item, i) => (
+
+            <div className="flex flex-col items-center justify-center flex-1 space-y-10">
+              {navLinks.map((link, i) => (
                 <motion.a
-                  key={item}
-                  initial={{ opacity: 0, y: 20 }}
+                  key={link.name}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.1 }}
-                  href={`#${item.toLowerCase()}`}
+                  transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-4xl font-serif hover:italic transition-all"
+                  className="text-5xl font-serif hover:text-accent transition-colors lowercase italic"
                 >
-                  {item}
+                  {link.name}
                 </motion.a>
               ))}
+            </div>
+
+            <div className="p-12 flex justify-center space-x-8 opacity-40 text-xs uppercase tracking-widest">
+              <a href="#">Instagram</a>
+              <a href="#">Twitter</a>
+              <a href="#">TikTok</a>
             </div>
           </motion.div>
         )}
